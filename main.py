@@ -40,18 +40,30 @@ def main():
     if not os.path.exists(input_dir):
         raise ValueError(f"Input directory {input_dir} does not exist.")
 
+    generated = []
+    existed = []
+    unsupported = []
 
     files = os.listdir(input_dir)
     for file in tqdm(files, "Processing files", unit=" file"):
-        if not os.path.splitext(file)[1].lower() in SUPPORTED_FORMATS:
+        ext = os.path.splitext(file)[1].lower()
+        if not ext in SUPPORTED_FORMATS:
+            if ext != ".xmp":
+                unsupported.append(file)
             continue
 
         file_path = os.path.join(input_dir, file)
         output_path = os.path.join(input_dir, os.path.basename(file_path).split(".")[0] + ".xmp")
 
+        if os.path.exists(output_path):
+            existed.append(file)
+            continue
+
         image_metadata = read_image_metadata(file_path)
         create_xmp(output_path, image_metadata.positive, image_metadata.negative, image_metadata.setting)
+        generated.append(file)
 
+    print(f"Generated: {len(generated)} Existed: {len(existed)} Unsupported: {len(unsupported)}")
 
 if __name__ == "__main__":
     main()
