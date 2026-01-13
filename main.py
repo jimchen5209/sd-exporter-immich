@@ -17,14 +17,15 @@ def create_xmp(xmp_path, positive, negative, settings):
     desc = etree.SubElement(rdf, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description")
     
     # Description
-    desc.set("{http://purl.org/dc/elements/1.1/}description", positive)
+    splitted_settings = settings.split(", ")
+    description= f"Prompt: {positive}\nNegative: {negative}\n{"\n".join(splitted_settings)}"
+    desc.set("{http://purl.org/dc/elements/1.1/}description", description)
     
     # Tags
     tags = etree.SubElement(desc, "{http://www.digikam.org/ns/1.0/}TagsList")
-    etree.SubElement(tags, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}li").text = f"Negative: {negative}"
-    splitted_settings = settings.split(", ")
-    for setting in splitted_settings:
-        etree.SubElement(tags, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}li").text = setting
+    splitted_prompt = map(lambda x: x.strip(), positive.split(","))
+    for prompt in splitted_prompt:
+        etree.SubElement(tags, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}li").text = prompt
     
     # Save
     tree = etree.ElementTree(xmp)
