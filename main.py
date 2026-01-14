@@ -10,6 +10,27 @@ def read_image_metadata(image_path):
         image_metadata = ImageDataReader(f)
         return image_metadata
 
+def parse_tag(tag):
+    return tag.strip() \
+        .replace("\\(", "<bracket>") \
+        .replace("\\)", "</bracket>") \
+        .replace("(", "") \
+        .replace(")", "") \
+        .replace("<bracket>", "(")  \
+        .replace("</bracket>", ")") \
+        .replace("\\[", "<square>") \
+        .replace("\\]", "</square>") \
+        .replace("[", "") \
+        .replace("]", "") \
+        .replace("<square>", "[")  \
+        .replace("</square>", "]") \
+        .replace("\\{", "<curly>") \
+        .replace("\\}", "</curly>") \
+        .replace("{", "") \
+        .replace("}", "") \
+        .replace("<curly>", "{")  \
+        .replace("</curly>", "}")
+
 def create_xmp(xmp_path, positive, negative, settings):
     # XMP
     xmp = etree.Element("{adobe:ns:meta/}xmpmeta")
@@ -23,7 +44,7 @@ def create_xmp(xmp_path, positive, negative, settings):
     
     # Tags
     tags = etree.SubElement(desc, "{http://www.digikam.org/ns/1.0/}TagsList")
-    splitted_prompt = map(lambda x: x.strip(), positive.split(","))
+    splitted_prompt = map(parse_tag, positive.split(","))
     for prompt in splitted_prompt:
         etree.SubElement(tags, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}li").text = prompt
     
