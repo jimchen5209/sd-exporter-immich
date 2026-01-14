@@ -17,8 +17,8 @@ def create_xmp(xmp_path, positive, negative, settings):
     desc = etree.SubElement(rdf, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description")
     
     # Description
-    splitted_settings = settings.split(", ")
-    description= f"Prompt: {positive}\nNegative: {negative}\n{"\n".join(splitted_settings)}"
+    settings = "\n".join(settings.split(", "))
+    description= f"Prompt: {positive}\nNegative: {negative}\n{settings}"
     desc.set("{http://purl.org/dc/elements/1.1/}description", description)
     
     # Tags
