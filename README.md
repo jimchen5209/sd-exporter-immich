@@ -4,25 +4,29 @@ A tool to export images metadata from Stable Diffusion to [Immich](https://immic
 
 ## Usage
 
-1. Clone or download this repository.
-2. Install dependencies:
-  - With [uv](https://docs.astral.sh/uv/) (Recommended):
+1. Install this package with pip or [pipx](https://github.com/pypa/pipx) (Recommend using pipx):
     ```bash
-    uv sync
+    pip install git+https://github.com/jimchen5209/sd-exporter-immich.git
     ```
-  - With pip:
+    or
     ```bash
-    pip install -r requirements.txt
+    pipx install git+https://github.com/jimchen5209/sd-exporter-immich.git
     ```
-3. Run the exporter:
+2. Run the exporter:
     ```bash
-    python main.py <path-to-your-images-directory>
+    sd-export <path-to-your-images-directory>
     ```
-    or with uv:
-    ```bash
-    uv run main.py <path-to-your-images-directory>
-    ```
-4. The XMP Sidecars will be generated alongside the images in the specified input directory.
+3. The XMP Sidecars will be generated alongside the images in the specified input directory.
+
+## Uninstall
+To uninstall, run:
+```bash
+  pip uninstall sd-exporter-immich
+```
+or
+```bash
+  pipx uninstall sd-exporter-immich
+```
 
 ## Upload to Immich
 
@@ -34,3 +38,15 @@ Assume you have cli installed, and you haven't uploaded yet because immich will 
 immich login <your-immich-url> <your-api-key>
 immich upload --recursive <path-to-your-images-directory>
 ```
+
+## Development
+
+1. Clone or download this repository.
+2. Install dependencies with [uv](https://docs.astral.sh/uv/):
+    ```bash
+    uv sync
+    ```
+3. Run:
+    ```bash
+    uv run sd-export <path-to-your-images-directory>
+    ```
