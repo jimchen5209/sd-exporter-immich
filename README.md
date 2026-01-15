@@ -16,11 +16,11 @@ A tool to export images metadata from Stable Diffusion to [Immich](https://immic
     ```
 3. Run the exporter:
     ```bash
-    python main.py <input_directory>
+    python main.py <path-to-your-images-directory>
     ```
     or with uv:
     ```bash
-    uv run main.py <input_directory>
+    uv run main.py <path-to-your-images-directory>
     ```
 4. The XMP Sidecars will be generated alongside the images in the specified input directory.
 
