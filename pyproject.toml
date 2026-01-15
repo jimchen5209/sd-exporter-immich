@@ -1,7 +1,7 @@
 [project]
 name = "sd-exporter-immich"
 version = "0.1.0"
-description = "Add your description here"
+description = "Convert Stable Diffusion metadata from supported formats to immich supported .xmp files."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

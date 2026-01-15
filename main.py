@@ -53,20 +53,21 @@ def create_xmp(xmp_path, positive, negative, settings):
     tree.write(xmp_path, encoding="utf-8", xml_declaration=True, pretty_print=True)
 
 def main():
-    parser = argparse.ArgumentParser(description="Read metadata")
-    parser.add_argument("input_dir", help="input")
+    supported_formats_text = ", ".join(SUPPORTED_FORMATS)
+    parser = argparse.ArgumentParser(description=f"Convert Stable Diffusion metadata from {supported_formats_text} files to immich supported .xmp files.")
+    parser.add_argument("image_folder", help="Folder containing images to convert from.")
     args = parser.parse_args()
 
-    input_dir = args.input_dir
+    image_folder = args.image_folder
 
-    if not os.path.exists(input_dir):
-        raise ValueError(f"Input directory {input_dir} does not exist.")
+    if not os.path.exists(image_folder):
+        raise ValueError(f"Input directory {image_folder} does not exist.")
 
     generated = []
     existed = []
     unsupported = []
 
-    files = os.listdir(input_dir)
+    files = os.listdir(image_folder)
     for file in tqdm(files, "Processing files", unit=" file"):
         ext = os.path.splitext(file)[1].lower()
         if not ext in SUPPORTED_FORMATS:
@@ -74,8 +75,8 @@ def main():
                 unsupported.append(file)
             continue
 
-        file_path = os.path.join(input_dir, file)
-        output_path = os.path.join(input_dir, os.path.basename(file_path).split(".")[0] + ".xmp")
+        file_path = os.path.join(image_folder, file)
+        output_path = os.path.join(image_folder, os.path.basename(file_path).split(".")[0] + ".xmp")
 
         if os.path.exists(output_path):
             existed.append(file)
