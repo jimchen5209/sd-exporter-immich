@@ -40,11 +40,11 @@ def parse_tag(prompt: str) -> list[str]:
         # Remove de-emphasis [x] (Not escaped)
         part = DE_EMPHASIS_PATTERN.sub(r'\1', part)
         
-        # Remove emphasis (x) (Not escaped)
-        part = EMPHASIS_PATTERN.sub(r'\1', part)
-        
         # Remove Multiply emphasis (x:number) (Not escaped)
         part = MULTIPLY_EMPHASIS_PATTERN.sub(r'\1', part)
+
+        # Remove emphasis (x) (Not escaped)
+        part = EMPHASIS_PATTERN.sub(r'\1', part)
         
         # Remove Multiply x:number
         part = MULTIPLY_PATTERN.sub(r'\1', part)
