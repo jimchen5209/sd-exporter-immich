@@ -1,5 +1,6 @@
 import argparse
 import os
+from pathlib import Path
 from sd_prompt_reader.constants import SUPPORTED_FORMATS
 from tqdm import tqdm
 
@@ -7,11 +8,10 @@ from utils.image import read_image_metadata, write_xmp
 from utils.parser import parse_settings, parse_tag
 
 
-def process(path: str):
+def process(path: Path):
     generated = []
     existed = []
     unsupported = []
-
 
     files = os.listdir(path)
     for file in tqdm(files, "Processing files", unit=" file"):
@@ -21,8 +21,8 @@ def process(path: str):
                 unsupported.append(file)
             continue
 
-        file_path = os.path.join(path, file)
-        output_path = os.path.join(path, os.path.basename(file_path).split(".")[0] + ".xmp")
+        file_path = path / file
+        output_path = file_path.with_suffix(".xmp")
 
         if os.path.exists(output_path):
             existed.append(file)
@@ -51,9 +51,9 @@ def main():
     parser.add_argument("input_dir", help="input")
     args = parser.parse_args()
 
-    input_dir = args.input_dir
+    input_dir = Path(args.input_dir)
 
-    if not os.path.exists(input_dir):
+    if not input_dir.exists():
         raise ValueError(f"Input directory {input_dir} does not exist.")
 
     process(input_dir)
