@@ -4,6 +4,9 @@ def parse_tag(prompt: str) -> list[str]:
     """
     Parse prompt according to Native Prompt Parser format on sdnext, remove modifiers and extract tags
     """
+    if not prompt or not isinstance(prompt, str):
+        return []
+
     parts = prompt.split(',')
     
     cleaned_tags = []
@@ -14,7 +17,7 @@ def parse_tag(prompt: str) -> list[str]:
             continue
         
         # Process prompt scheduling [x:x:number], taking two x
-        scheduling_match = re.search(r'(?<!\\)\[([^:\[\]]+):([^:\[\]]+):\d+(?:\.\d+)?\]', part)
+        scheduling_match = re.search(r'(?<!\\)\[([^\[\]:]+?):([^\[\]:]+?):(\d+(?:\.\d+)?)\]', part)
         if scheduling_match:
             tag1 = scheduling_match.group(1).strip()
             tag2 = scheduling_match.group(2).strip()
@@ -25,16 +28,16 @@ def parse_tag(prompt: str) -> list[str]:
             continue
         
         # Remove de-emphasis [x] (Not escaped)
-        part = re.sub(r'(?<!\\)\[([^\[\]]+)\]', r'\1', part)
+        part = re.sub(r'(?<!\\)\[([^\[\]]+?)\]', r'\1', part)
         
         # Remove emphasis (x) (Not escaped)
-        part = re.sub(r'(?<!\\)\(([^()]+)\)', r'\1', part)
+        part = re.sub(r'(?<!\\)\(([^()]+?)\)', r'\1', part)
         
         # Remove Multiply emphasis (x:number) (Not escaped)
-        part = re.sub(r'(?<!\\)\(([^():]+):\d+(?:\.\d+)?\)', r'\1', part)
+        part = re.sub(r'(?<!\\)\(([^():]+?):(\d+(?:\.\d+)?)\)', r'\1', part)
         
         # Remove Multiply x:number
-        part = re.sub(r'([^:,\s\(\)\[\]]+):\d+(?:\.\d+)?(?=\s|$|,)', r'\1', part)
+        part = re.sub(r'(\S+?):(\d+(?:\.\d+)?)(?=\s|$|,)', r'\1', part)
         
         # Restore Escaped：\( -> (, \) -> ), \[ -> [, \] -> ], \{ -> {, \} -> }
         part = part.replace(r'\(', '(')
