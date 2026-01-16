@@ -15,23 +15,12 @@ A tool to export images metadata from Stable Diffusion to [Immich](https://immic
     ```bash
     pipx install git+https://github.com/jimchen5209/sd-exporter-immich.git@release
     ```
-    > [!NOTE]
-    > You can replace `release` with version in [release](https://github.com/jimchen5209/sd-exporter-immich/releases) to install specific version, or `dev` to install the latest development version.
+    > [NOTE] You can replace `release` with version in [release](https://github.com/jimchen5209/sd-exporter-immich/releases) to install specific version, or `dev` to install the latest development version.
 2. Run the exporter:
     ```bash
     sd-export <path-to-your-images-directory>
     ```
 3. The XMP Sidecars will be generated alongside the images in the specified input directory.
-
-## Uninstall
-To uninstall, run:
-```bash
-  pip uninstall sd-exporter-immich
-```
-or
-```bash
-  pipx uninstall sd-exporter-immich
-```
 
 ## Upload to Immich
 
@@ -43,6 +32,17 @@ Assume you have cli installed, and you haven't uploaded yet because immich will 
 immich login <your-immich-url> <your-api-key>
 immich upload --recursive <path-to-your-images-directory>
 ```
+
+## Uninstall
+To uninstall, run:
+```bash
+  pip uninstall sd-exporter-immich
+```
+or
+```bash
+  pipx uninstall sd-exporter-immich
+```
+
 
 ## Development
 
