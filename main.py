@@ -4,7 +4,7 @@ from sd_prompt_reader.constants import SUPPORTED_FORMATS
 from tqdm import tqdm
 
 from utils.image import read_image_metadata, write_xmp
-from utils.parser import parse_tag
+from utils.parser import parse_settings, parse_tag
 
 
 def process(path: str):
@@ -36,8 +36,9 @@ def process(path: str):
 
 def convert_to_xmp(xmp_path: str, positive: str, negative: str, settings: str):
     # Description
-    settings = "\n".join(settings.split(", "))
-    description= f"Prompt: {positive}\nNegative: {negative}\n{settings}"
+    parsed_settings = parse_settings(settings)
+    settings_str = '\n'.join([f"{key}: {value}" for key, value in parsed_settings.items()])
+    description= f"Prompt: {positive}\nNegative: {negative}\n{settings_str}"
     
     # Tags
     parsed_tags = parse_tag(positive)

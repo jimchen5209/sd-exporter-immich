@@ -49,3 +49,29 @@ def parse_tag(prompt: str) -> list[str]:
             cleaned_tags.append(part)
     
     return cleaned_tags
+
+def parse_settings(settings: str) -> dict[str, str]:
+    """
+    Convert a comma-separated key: value format string into a dictionary using regular expressions
+    """
+    result = {}
+    
+    # Regular expression description:
+    # (\w+(?:\s+\w+)*) - Capture key (word character, can include spaces)
+    # :\s* - matches colon and following space
+    # (?:"([^"]*)"|([^,]+)) - Capture value (content within quotes or non-comma content)
+    pattern = r'(\w+(?:\s+\w+)*):\s*(?:"([^"]*)"|([^,]+?))\s*(?:,|$)'
+    
+    matches = re.finditer(pattern, settings)
+    
+    for match in matches:
+        key = match.group(1).strip()
+        # group(2) is the value within quotes, group(3) is the value without quotes
+        if match.group(2) is not None:
+            value = match.group(2).strip()
+        else:
+            value = match.group(3).strip()
+        
+        result[key] = value
+    
+    return result
