@@ -61,7 +61,10 @@ def main():
     image_folder = args.image_folder
 
     if not os.path.exists(image_folder):
-        raise ValueError(f"Input directory {image_folder} does not exist.")
+        parser.error(f"Image folder '{image_folder}' does not exist.")
+
+    if not os.path.isdir(image_folder):
+        parser.error(f"'{image_folder}' is not a folder.")
 
     generated = []
     existed = []
