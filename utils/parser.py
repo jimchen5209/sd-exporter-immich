@@ -1,5 +1,15 @@
 import re
 
+# Compile regex
+## Tag
+SCHEDULING_PATTERN = re.compile(r'(?<!\\)\[([^\[\]:]+?):([^\[\]:]+?):(\d+(?:\.\d+)?)\]')
+DE_EMPHASIS_PATTERN = re.compile(r'(?<!\\)\[([^\[\]]+?)\]')
+EMPHASIS_PATTERN = re.compile(r'(?<!\\)\(([^()]+?)\)')
+MULTIPLY_EMPHASIS_PATTERN = re.compile(r'(?<!\\)\(([^():]+?):(\d+(?:\.\d+)?)\)')
+MULTIPLY_PATTERN = re.compile(r'(\S+?):(\d+(?:\.\d+)?)(?=\s|$|,)')
+## Settings
+SETTINGS_PATTERN = re.compile(r'([^:,]+?)\s*:\s*(?:"([^"]*)"|([^,]+?))\s*(?:,|$)')
+
 def parse_tag(prompt: str) -> list[str]:
     """
     Parse prompt according to Native Prompt Parser format on sdnext, remove modifiers and extract tags
@@ -17,7 +27,7 @@ def parse_tag(prompt: str) -> list[str]:
             continue
         
         # Process prompt scheduling [x:x:number], taking two x
-        scheduling_match = re.search(r'(?<!\\)\[([^\[\]:]+?):([^\[\]:]+?):(\d+(?:\.\d+)?)\]', part)
+        scheduling_match = SCHEDULING_PATTERN.match(part)
         if scheduling_match:
             tag1 = scheduling_match.group(1).strip()
             tag2 = scheduling_match.group(2).strip()
@@ -28,16 +38,16 @@ def parse_tag(prompt: str) -> list[str]:
             continue
         
         # Remove de-emphasis [x] (Not escaped)
-        part = re.sub(r'(?<!\\)\[([^\[\]]+?)\]', r'\1', part)
+        part = DE_EMPHASIS_PATTERN.sub(r'\1', part)
         
         # Remove emphasis (x) (Not escaped)
-        part = re.sub(r'(?<!\\)\(([^()]+?)\)', r'\1', part)
+        part = EMPHASIS_PATTERN.sub(r'\1', part)
         
         # Remove Multiply emphasis (x:number) (Not escaped)
-        part = re.sub(r'(?<!\\)\(([^():]+?):(\d+(?:\.\d+)?)\)', r'\1', part)
+        part = MULTIPLY_EMPHASIS_PATTERN.sub(r'\1', part)
         
         # Remove Multiply x:number
-        part = re.sub(r'(\S+?):(\d+(?:\.\d+)?)(?=\s|$|,)', r'\1', part)
+        part = MULTIPLY_PATTERN.sub(r'\1', part)
         
         # Restore Escaped：\( -> (, \) -> ), \[ -> [, \] -> ], \{ -> {, \} -> }
         part = part.replace(r'\(', '(')
@@ -59,13 +69,7 @@ def parse_settings(settings: str) -> dict[str, str]:
     """
     result = {}
     
-    # Regular expression description:
-    # (\w+(?:\s+\w+)*) - Capture key (word character, can include spaces)
-    # :\s* - matches colon and following space
-    # (?:"([^"]*)"|([^,]+)) - Capture value (content within quotes or non-comma content)
-    pattern = r'([^:,]+?)\s*:\s*(?:"([^"]*)"|([^,]+?))\s*(?:,|$)'
-    
-    matches = re.finditer(pattern, settings)
+    matches = SETTINGS_PATTERN.finditer(settings)
     
     for match in matches:
         key = match.group(1).strip()
