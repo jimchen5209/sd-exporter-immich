@@ -9,12 +9,14 @@ A tool to export images metadata from Stable Diffusion to [Immich](https://immic
 
 1. Install this package with pip or [pipx](https://github.com/pypa/pipx) (Recommend using pipx):
     ```bash
-    pip install git+https://github.com/jimchen5209/sd-exporter-immich.git
+    pip install git+https://github.com/jimchen5209/sd-exporter-immich.git@release
     ```
     or
     ```bash
-    pipx install git+https://github.com/jimchen5209/sd-exporter-immich.git
+    pipx install git+https://github.com/jimchen5209/sd-exporter-immich.git@release
     ```
+    > [!NOTE]
+    > You can replace `release` with version in [release](https://github.com/jimchen5209/sd-exporter-immich/releases) to install specific version, or `dev` to install the latest development version.
 2. Run the exporter:
     ```bash
     sd-export <path-to-your-images-directory>
