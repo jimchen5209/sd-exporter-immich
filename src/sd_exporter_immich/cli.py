@@ -4,8 +4,8 @@ from pathlib import Path
 from sd_prompt_reader.constants import SUPPORTED_FORMATS
 from tqdm import tqdm
 
-from utils.image import read_image_metadata, write_xmp
-from utils.parser import parse_settings, parse_tag
+from sd_exporter_immich.utils.image import read_image_metadata, write_xmp
+from sd_exporter_immich.utils.parser import parse_settings, parse_tag
 
 def validate_file_path(canonical_input_dir: Path, file_path_raw: Path) -> Path | None:
     try:
@@ -73,24 +73,24 @@ def main():
     parser.add_argument("image_folder", help="Folder containing images to convert from.")
     args = parser.parse_args()
 
-    input_dir = Path(args.input_dir)
+    image_folder = Path(args.image_folder)
 
     # Convert input path to Path object and resolve it
     try:
-        canonical_input_dir = input_dir.resolve(strict=True)
+        canonical_image_folder = image_folder.resolve(strict=True)
     except FileNotFoundError:
         # Consistent with main's ValueError for non-existent directory
-        parser.error(f"Image folder '{input_dir}' does not exist.")
+        parser.error(f"Image folder '{image_folder}' does not exist.")
     except (OSError, RuntimeError) as e:
         # Catch other resolution errors
-        parser.error(f"Invalid image folder '{input_dir}': {e}")
+        parser.error(f"Invalid image folder '{image_folder}': {e}")
 
-    if not canonical_input_dir.is_dir():
-        parser.error(f"'{input_dir}' is not a folder.")
+    if not canonical_image_folder.is_dir():
+        parser.error(f"'{image_folder}' is not a folder.")
 
-    print(f"Image folder: {canonical_input_dir}")
+    print(f"Image folder: {canonical_image_folder}")
 
-    process(canonical_input_dir)
+    process(canonical_image_folder)
 
 if __name__ == "__main__":
     main()
