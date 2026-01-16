@@ -5,31 +5,13 @@ from sd_prompt_reader.constants import SUPPORTED_FORMATS
 from tqdm import tqdm
 from lxml import etree
 
+from utils.parser import parse_tag
+
+
 def read_image_metadata(image_path):
     with open(image_path, "rb+") as f:
         image_metadata = ImageDataReader(f)
         return image_metadata
-
-def parse_tag(tag):
-    return tag.strip() \
-        .replace("\\(", "<bracket>") \
-        .replace("\\)", "</bracket>") \
-        .replace("(", "") \
-        .replace(")", "") \
-        .replace("<bracket>", "(")  \
-        .replace("</bracket>", ")") \
-        .replace("\\[", "<square>") \
-        .replace("\\]", "</square>") \
-        .replace("[", "") \
-        .replace("]", "") \
-        .replace("<square>", "[")  \
-        .replace("</square>", "]") \
-        .replace("\\{", "<curly>") \
-        .replace("\\}", "</curly>") \
-        .replace("{", "") \
-        .replace("}", "") \
-        .replace("<curly>", "{")  \
-        .replace("</curly>", "}")
 
 def create_xmp(xmp_path, positive, negative, settings):
     # XMP
@@ -44,7 +26,7 @@ def create_xmp(xmp_path, positive, negative, settings):
     
     # Tags
     tags = etree.SubElement(desc, "{http://www.digikam.org/ns/1.0/}TagsList")
-    splitted_prompt = map(parse_tag, positive.split(","))
+    splitted_prompt = parse_tag(positive)
     for prompt in splitted_prompt:
         etree.SubElement(tags, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}li").text = prompt
     
