@@ -40,18 +40,18 @@ def process(path: Path):
                 unsupported.append(file.name)
             continue
 
-        file_path = validate_file_path(path, path / file)
+        file_path = validate_file_path(path, file)
         if file_path is None:
             continue
         output_path = file_path.with_suffix(".xmp")
 
         if output_path.exists():
-            existed.append(file)
+            existed.append(file.name)
             continue
 
         image_metadata = read_image_metadata(file_path)
         convert_to_xmp(output_path, image_metadata.positive, image_metadata.negative, image_metadata.setting)
-        generated.append(file)
+        generated.append(file.name)
 
     print(f"Generated: {len(generated)} Existed: {len(existed)} Unsupported: {len(unsupported)}")
 
