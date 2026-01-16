@@ -2,6 +2,9 @@
 
 A tool to export images metadata from Stable Diffusion to [Immich](https://immich.app/) supported [XMP Sidecars](https://docs.immich.app/features/xmp-sidecars) format.
 
+> [!NOTE]
+> Tag parsing in this tool is designed for [sdnext](https://vladmandic.github.io/sdnext-docs/).
+
 ## Usage
 
 1. Clone or download this repository.
