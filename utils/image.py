@@ -9,7 +9,7 @@ NS_DC = "{http://purl.org/dc/elements/1.1/}"
 NS_DIGIKAM = "{http://www.digikam.org/ns/1.0/}"
 
 def read_image_metadata(image_path: Path):
-    with open(image_path, "rb+") as f:
+    with open(image_path, "rb") as f:
         image_metadata = ImageDataReader(f)
         return image_metadata
 
