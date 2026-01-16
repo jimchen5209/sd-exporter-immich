@@ -1,38 +1,49 @@
 import argparse
 import os
-from sd_prompt_reader.image_data_reader import ImageDataReader
 from sd_prompt_reader.constants import SUPPORTED_FORMATS
 from tqdm import tqdm
-from lxml import etree
 
+from utils.image import read_image_metadata, write_xmp
 from utils.parser import parse_tag
 
 
-def read_image_metadata(image_path):
-    with open(image_path, "rb+") as f:
-        image_metadata = ImageDataReader(f)
-        return image_metadata
+def process(path: str):
+    generated = []
+    existed = []
+    unsupported = []
 
-def create_xmp(xmp_path, positive, negative, settings):
-    # XMP
-    xmp = etree.Element("{adobe:ns:meta/}xmpmeta")
-    rdf = etree.SubElement(xmp, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}RDF")
-    desc = etree.SubElement(rdf, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description")
-    
+
+    files = os.listdir(path)
+    for file in tqdm(files, "Processing files", unit=" file"):
+        ext = os.path.splitext(file)[1].lower()
+        if not ext in SUPPORTED_FORMATS:
+            if ext != ".xmp":
+                unsupported.append(file)
+            continue
+
+        file_path = os.path.join(path, file)
+        output_path = os.path.join(path, os.path.basename(file_path).split(".")[0] + ".xmp")
+
+        if os.path.exists(output_path):
+            existed.append(file)
+            continue
+
+        image_metadata = read_image_metadata(file_path)
+        convert_to_xmp(output_path, image_metadata.positive, image_metadata.negative, image_metadata.setting)
+        generated.append(file)
+
+    print(f"Generated: {len(generated)} Existed: {len(existed)} Unsupported: {len(unsupported)}")
+
+def convert_to_xmp(xmp_path: str, positive: str, negative: str, settings: str):
     # Description
     settings = "\n".join(settings.split(", "))
     description= f"Prompt: {positive}\nNegative: {negative}\n{settings}"
-    desc.set("{http://purl.org/dc/elements/1.1/}description", description)
     
     # Tags
-    tags = etree.SubElement(desc, "{http://www.digikam.org/ns/1.0/}TagsList")
-    splitted_prompt = parse_tag(positive)
-    for prompt in splitted_prompt:
-        etree.SubElement(tags, "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}li").text = prompt
+    parsed_tags = parse_tag(positive)
     
     # Save
-    tree = etree.ElementTree(xmp)
-    tree.write(xmp_path, encoding="utf-8", xml_declaration=True, pretty_print=True)
+    write_xmp(xmp_path, description, parsed_tags)
 
 def main():
     parser = argparse.ArgumentParser(description="Read metadata")
@@ -44,30 +55,7 @@ def main():
     if not os.path.exists(input_dir):
         raise ValueError(f"Input directory {input_dir} does not exist.")
 
-    generated = []
-    existed = []
-    unsupported = []
-
-    files = os.listdir(input_dir)
-    for file in tqdm(files, "Processing files", unit=" file"):
-        ext = os.path.splitext(file)[1].lower()
-        if not ext in SUPPORTED_FORMATS:
-            if ext != ".xmp":
-                unsupported.append(file)
-            continue
-
-        file_path = os.path.join(input_dir, file)
-        output_path = os.path.join(input_dir, os.path.basename(file_path).split(".")[0] + ".xmp")
-
-        if os.path.exists(output_path):
-            existed.append(file)
-            continue
-
-        image_metadata = read_image_metadata(file_path)
-        create_xmp(output_path, image_metadata.positive, image_metadata.negative, image_metadata.setting)
-        generated.append(file)
-
-    print(f"Generated: {len(generated)} Existed: {len(existed)} Unsupported: {len(unsupported)}")
+    process(input_dir)
 
 if __name__ == "__main__":
     main()
