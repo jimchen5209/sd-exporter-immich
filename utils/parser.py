@@ -27,7 +27,7 @@ def parse_tag(prompt: str) -> list[str]:
             continue
         
         # Process prompt scheduling [x:x:number], taking two x
-        scheduling_match = SCHEDULING_PATTERN.match(part)
+        scheduling_match = SCHEDULING_PATTERN.search(part)
         if scheduling_match:
             tag1 = scheduling_match.group(1).strip()
             tag2 = scheduling_match.group(2).strip()
