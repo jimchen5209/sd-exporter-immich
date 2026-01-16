@@ -8,7 +8,7 @@ EMPHASIS_PATTERN = re.compile(r'(?<!\\)\(([^()]+?)\)')
 MULTIPLY_EMPHASIS_PATTERN = re.compile(r'(?<!\\)\(([^():]+?):(\d+(?:\.\d+)?)\)')
 MULTIPLY_PATTERN = re.compile(r'(\S+?):(\d+(?:\.\d+)?)(?=\s|$|,)')
 ## Settings
-SETTINGS_PATTERN = re.compile(r'([^:,]+)\s*:\s*(?:"([^"]*)"|([^,]+))\s*(?:,|$)')
+SETTINGS_PATTERN = re.compile(r'([^:,]+)\s*:\s*("(?:\\.|[^"])*"|"(?:\\.|[^"])*|[^",]+)\s*(?:,|$)')
 
 def parse_tag(prompt: str) -> list[str]:
     """
@@ -73,11 +73,10 @@ def parse_settings(settings: str) -> dict[str, str]:
     
     for match in matches:
         key = match.group(1).strip()
-        # group(2) is the value within quotes, group(3) is the value without quotes
-        if match.group(2) is not None:
-            value = match.group(2).strip()
-        else:
-            value = match.group(3).strip()
+        value = match.group(2).strip()
+
+        if value.startswith('"') and value.endswith('"') and len(value) >= 2:
+            value = value[1:-1]
         
         result[key] = value
     
