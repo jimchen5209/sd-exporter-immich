@@ -14,7 +14,7 @@ def validate_file_path(canonical_input_dir: Path, file_path_raw: Path) -> Path |
     except FileNotFoundError:
         print(f"Warning: File '{file_path_raw}' not found or inaccessible, skipping.")
         return None
-    except Exception as e:
+    except (OSError, RuntimeError) as e:
         print(f"Warning: Could not resolve path for '{file_path_raw}': {e}, skipping.")
         return None
     # CRITICAL: Validate that the resolved file path is still within the canonical input directory
@@ -80,7 +80,7 @@ def main():
     except FileNotFoundError:
         # Consistent with main's ValueError for non-existent directory
         parser.error(f"Image folder '{input_dir}' does not exist.")
-    except Exception as e:
+    except (OSError, RuntimeError) as e:
         # Catch other resolution errors
         parser.error(f"Invalid image folder '{input_dir}': {e}")
 
