@@ -63,7 +63,7 @@ def parse_settings(settings: str) -> dict[str, str]:
     # (\w+(?:\s+\w+)*) - Capture key (word character, can include spaces)
     # :\s* - matches colon and following space
     # (?:"([^"]*)"|([^,]+)) - Capture value (content within quotes or non-comma content)
-    pattern = r'(\w+(?:\s+\w+)*):\s*(?:"([^"]*)"|([^,]+?))\s*(?:,|$)'
+    pattern = r'([^:,]+?)\s*:\s*(?:"([^"]*)"|([^,]+?))\s*(?:,|$)'
     
     matches = re.finditer(pattern, settings)
     
