@@ -35,7 +35,7 @@ def process(path: Path):
             continue
 
         ext = file.suffix.lower()
-        if not ext in SUPPORTED_FORMATS:
+        if ext not in SUPPORTED_FORMATS:
             if ext != ".xmp":
                 unsupported.append(file.name)
             continue
