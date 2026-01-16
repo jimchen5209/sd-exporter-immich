@@ -54,7 +54,10 @@ def main():
     input_dir = Path(args.input_dir)
 
     if not input_dir.exists():
-        raise ValueError(f"Input directory {input_dir} does not exist.")
+        parser.error(f"Image folder '{input_dir}' does not exist.")
+
+    if not input_dir.is_dir():
+        parser.error(f"'{input_dir}' is not a folder.")
 
     process(input_dir)
 
