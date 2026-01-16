@@ -30,12 +30,14 @@ def process(path: Path):
     existed = []
     unsupported = []
 
-    files = os.listdir(path)
-    for file in tqdm(files, "Processing files", unit=" file"):
-        ext = os.path.splitext(file)[1].lower()
+    for file in tqdm(list(path.iterdir()), "Processing files", unit=" file"):
+        if not file.is_file():
+            continue
+
+        ext = file.suffix.lower()
         if not ext in SUPPORTED_FORMATS:
             if ext != ".xmp":
-                unsupported.append(file)
+                unsupported.append(file.name)
             continue
 
         file_path = validate_file_path(path, path / file)
@@ -43,7 +45,7 @@ def process(path: Path):
             continue
         output_path = file_path.with_suffix(".xmp")
 
-        if os.path.exists(output_path):
+        if output_path.exists():
             existed.append(file)
             continue
 
