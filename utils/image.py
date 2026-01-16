@@ -1,13 +1,14 @@
+from pathlib import Path
 from sd_prompt_reader.image_data_reader import ImageDataReader
 from lxml import etree
 
 
-def read_image_metadata(image_path: str):
+def read_image_metadata(image_path: Path):
     with open(image_path, "rb+") as f:
         image_metadata = ImageDataReader(f)
         return image_metadata
 
-def write_xmp(path: str, description: str, tags: list[str]):
+def write_xmp(path: Path, description: str, tags: list[str]):
     # Define namespaces as constants to improve readability and maintainability.
     NS_ADOBE_META = "{adobe:ns:meta/}"
     NS_RDF = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"

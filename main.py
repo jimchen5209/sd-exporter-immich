@@ -53,7 +53,7 @@ def process(path: Path):
 
     print(f"Generated: {len(generated)} Existed: {len(existed)} Unsupported: {len(unsupported)}")
 
-def convert_to_xmp(xmp_path: str, positive: str, negative: str, settings: str):
+def convert_to_xmp(xmp_path: Path, positive: str, negative: str, settings: str):
     # Description
     parsed_settings = parse_settings(settings)
     settings_str = '\n'.join([f"{key}: {value}" for key, value in parsed_settings.items()])
