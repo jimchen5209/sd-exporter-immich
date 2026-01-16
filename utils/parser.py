@@ -8,7 +8,7 @@ EMPHASIS_PATTERN = re.compile(r'(?<!\\)\(([^()]+?)\)')
 MULTIPLY_EMPHASIS_PATTERN = re.compile(r'(?<!\\)\(([^():]+?):(\d+(?:\.\d+)?)\)')
 MULTIPLY_PATTERN = re.compile(r'(\S+?):(\d+(?:\.\d+)?)(?=\s|$|,)')
 ## Settings
-SETTINGS_PATTERN = re.compile(r'([^:,]+?)\s*:\s*(?:"([^"]*)"|([^,]+?))\s*(?:,|$)')
+SETTINGS_PATTERN = re.compile(r'([^:,]+)\s*:\s*(?:"([^"]*)"|([^,]+))\s*(?:,|$)')
 
 def parse_tag(prompt: str) -> list[str]:
     """
