@@ -12,6 +12,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.37.1",
     "ruff>=0.14.13",
     "types-lxml>=2026.1.1",
 ]
@@ -25,3 +26,6 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 package = true
+
+[tool.basedpyright]
+reportUnusedCallResult = false
