@@ -55,3 +55,14 @@ or
     ```bash
     uv run sd-export <path-to-your-images-directory>
     ```
+4. For [ruff](https://docs.astral.sh/ruff/) linting and formatting, run:
+    ```bash
+    uv run ruff check --fix
+    ```
+    ```bash
+    uv run ruff format
+    ```
+5. For [basedpyright](https://docs.basedpyright.com/) type checking, run:
+    ```bash
+    uv run basedpyright
+    ```

@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "charliermarsh.ruff",
+    "ms-python.debugpy",
+    "ms-python.vscode-python-envs",
+    "detachhead.basedpyright",
+    "mhutchie.git-graph",
+    "tamasfe.even-better-toml",
+    "vivaxy.vscode-conventional-commits"
+  ]
+}

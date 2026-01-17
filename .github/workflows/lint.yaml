@@ -1,0 +1,33 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v5
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+    
+    - name: "Set up Python"
+      uses: actions/setup-python@v6
+      with:
+        python-version-file: ".python-version"
+      
+    - name: Install the project
+      run: uv sync --locked --all-extras --dev
+
+    - name: basedpyright
+      run: uv run basedpyright
+    
+    - name: Ruff Lint
+      run: uv run ruff check
+
+    - name: Ruff format
+      run: uv run ruff format --check --diff
