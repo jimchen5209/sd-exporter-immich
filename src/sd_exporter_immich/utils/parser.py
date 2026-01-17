@@ -17,12 +17,12 @@ def parse_tag(prompt: str) -> list[str]:
     """
     Parse prompt according to Native Prompt Parser format on sdnext, remove modifiers and extract tags
     """
-    if not prompt or not isinstance(prompt, str):
+    if not prompt:
         return []
 
     parts = prompt.split(",")
 
-    cleaned_tags = []
+    cleaned_tags: list[str] = []
 
     for part in parts:
         part = part.strip()
@@ -71,7 +71,7 @@ def parse_settings(settings: str) -> dict[str, str]:
     """
     Convert a comma-separated key: value format string into a dictionary using regular expressions
     """
-    result = {}
+    result: dict[str, str] = {}
 
     matches = SETTINGS_PATTERN.finditer(settings)
 

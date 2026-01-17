@@ -1,5 +1,5 @@
 from pathlib import Path
-from sd_prompt_reader.image_data_reader import ImageDataReader
+from sd_prompt_reader.image_data_reader import ImageDataReader  # pyright: ignore[reportMissingTypeStubs]
 from lxml import etree
 
 # Define namespaces as constants to improve readability and maintainability.

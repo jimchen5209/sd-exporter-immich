@@ -1,10 +1,16 @@
 import argparse
+from dataclasses import dataclass
 from pathlib import Path
-from sd_prompt_reader.constants import SUPPORTED_FORMATS
+from sd_prompt_reader.constants import SUPPORTED_FORMATS  # pyright: ignore[reportMissingTypeStubs]
 from tqdm import tqdm
 
 from sd_exporter_immich.utils.image import read_image_metadata, write_xmp
 from sd_exporter_immich.utils.parser import parse_settings, parse_tag
+
+
+@dataclass
+class ProgramArgs:
+    image_folder: str
 
 
 def validate_file_path(canonical_input_dir: Path, file_path_raw: Path) -> Path | None:
@@ -29,9 +35,9 @@ def validate_file_path(canonical_input_dir: Path, file_path_raw: Path) -> Path |
 
 
 def process(path: Path):
-    generated = []
-    existed = []
-    unsupported = []
+    generated: list[str] = []
+    existed: list[str] = []
+    unsupported: list[str] = []
 
     for file in tqdm(list(path.iterdir()), "Processing files", unit=" file"):
         if not file.is_file():
@@ -87,9 +93,9 @@ def main():
         description=f"Convert Stable Diffusion metadata from {supported_formats_text} files to immich supported .xmp files."
     )
     parser.add_argument(
-        "image_folder", help="Folder containing images to convert from."
+        "image_folder", help="Folder containing images to convert from.", type=str
     )
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=ProgramArgs)
 
     image_folder = Path(args.image_folder)
 
