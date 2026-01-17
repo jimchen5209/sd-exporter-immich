@@ -2,6 +2,7 @@ import re
 
 # Compile regex
 ## Tag
+LORA_PATTERN = re.compile(r'^\s*<lora:[^>]?>\s*$')
 SCHEDULING_PATTERN = re.compile(r'(?<!\\)\[([^\[\]:]+?):([^\[\]:]+?):(\d+(?:\.\d+)?)\]')
 DE_EMPHASIS_PATTERN = re.compile(r'(?<!\\)\[([^\[\]]+?)\]')
 EMPHASIS_PATTERN = re.compile(r'(?<!\\)\(([^()]+?)\)')
@@ -26,6 +27,17 @@ def parse_tag(prompt: str) -> list[str]:
         if not part:
             continue
         
+        # Remove LoRA
+        if LORA_PATTERN.match(part):
+            continue
+        
+        # Remove LoRA part
+        part = LORA_PATTERN.sub('', part).strip()
+        
+        # Pass if part is empty after removing LoRA part
+        if not part:
+            continue
+
         # Process prompt scheduling [x:x:number], taking two x
         scheduling_match = SCHEDULING_PATTERN.search(part)
         if scheduling_match:
