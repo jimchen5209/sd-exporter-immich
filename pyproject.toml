@@ -26,6 +26,3 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 package = true
-
-[tool.basedpyright]
-reportUnusedCallResult = false

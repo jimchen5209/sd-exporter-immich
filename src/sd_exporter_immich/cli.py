@@ -92,7 +92,7 @@ def main():
     parser = argparse.ArgumentParser(
         description=f"Convert Stable Diffusion metadata from {supported_formats_text} files to immich supported .xmp files."
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "image_folder", help="Folder containing images to convert from.", type=str
     )
     args = parser.parse_args(namespace=ProgramArgs)
