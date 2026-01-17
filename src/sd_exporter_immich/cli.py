@@ -1,6 +1,7 @@
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
+from typing import cast
 from sd_prompt_reader.constants import SUPPORTED_FORMATS  # pyright: ignore[reportMissingTypeStubs]
 from tqdm import tqdm
 
@@ -93,9 +94,9 @@ def main():
         description=f"Convert Stable Diffusion metadata from {supported_formats_text} files to immich supported .xmp files."
     )
     _ = parser.add_argument(
-        "image_folder", help="Folder containing images to convert from.", type=str
+        "image_folder", help="Folder containing images to convert from."
     )
-    args = parser.parse_args(namespace=ProgramArgs)
+    args = ProgramArgs(image_folder=cast(str, parser.parse_args().image_folder))
 
     image_folder = Path(args.image_folder)
 
