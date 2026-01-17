@@ -13,10 +13,9 @@
   "packageRules": [
     {
       "matchDatasources": [
+        "pep621",
+        "pyenv",
         "pypi"
-      ],
-      "matchManagers": [
-        "uv"
       ],
       "minimumReleaseAge": "14 days",
       "internalChecksFilter": "strict",
