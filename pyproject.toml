@@ -12,6 +12,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "ruff>=0.14.13",
     "types-lxml>=2026.1.1",
 ]
 
