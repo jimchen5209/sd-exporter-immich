@@ -17,7 +17,7 @@ def parse_tag(prompt: str) -> list[str]:
     """
     Parse prompt according to Native Prompt Parser format on sdnext, remove modifiers and extract tags
     """
-    if not prompt:
+    if not prompt or not isinstance(prompt, str):  # pyright: ignore[reportUnnecessaryIsInstance] prevent runtime error
         return []
 
     parts = prompt.split(",")
