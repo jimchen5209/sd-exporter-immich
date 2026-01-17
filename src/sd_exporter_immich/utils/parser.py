@@ -23,10 +23,6 @@ def parse_tag(prompt: str) -> list[str]:
     cleaned_tags = []
     
     for part in parts:
-        part = part.strip()
-        if not part:
-            continue
-        
         # Remove LoRA parts
         part = LORA_PATTERN.sub('', part).strip()
 
