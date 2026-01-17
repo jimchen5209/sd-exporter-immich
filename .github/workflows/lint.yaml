@@ -24,10 +24,10 @@ jobs:
       run: uv sync --locked --all-extras --dev
 
     - name: basedpyright
-      run: basedpyright
+      run: uv run basedpyright
     
     - name: Ruff Lint
-      run: ruff check
+      run: uv run ruff check
 
     - name: Ruff format
-      run: ruff format --check --diff
+      run: uv run ruff format --check --diff
